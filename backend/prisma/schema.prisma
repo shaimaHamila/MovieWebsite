@@ -20,7 +20,7 @@ model movie {
   title       String   @db.VarChar(255)     
   description String?  
   releaseDate DateTime  
-  genre       String[]  
+  genre       Genre[]  
   rating      Float?    
   coverUrl    String  
   duration    Int?     
