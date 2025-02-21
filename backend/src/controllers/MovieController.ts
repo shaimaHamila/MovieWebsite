@@ -2,9 +2,8 @@ import { Request, Response } from 'express';
 import prisma from "../prisma";
 import { CustomResponse } from "../helpers/CustomResponse";
 import { createMovieValidator, updateMovieValidator } from "../validators/MovieValidator";
-import { Genre } from "@prisma/client";
 
-
+//Add new movie
 export const createMovie = async (req: Request, res: Response) => {
     const { error } = createMovieValidator.validate(req.body)
     if (error) {
@@ -97,7 +96,7 @@ export const getMovieById = async (req: Request, res: Response) => {
     } catch (error) {
         return CustomResponse.InternalServerError(
             res,
-            "An error occurred while adding the movie"
+            "An error occurred while fetching the movie"
         );
     }
 }
@@ -153,7 +152,7 @@ export const deleteMovie = async (req: Request, res: Response) => {
     } catch (error) {
         return CustomResponse.InternalServerError(
             res,
-            "An error occurred while adding the movie"
+            "An error occurred while deleting the movie"
         );
     }
 }
