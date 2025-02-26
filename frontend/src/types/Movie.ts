@@ -2,14 +2,14 @@ export type Movie = {
     id: number;
     title: string;
     description: string | null;
-    releaseDate: Date;
+    releaseDate: string;
     genre: Genre[];
     rating: number | null;
     coverUrl: string;
     duration: number | null;
     isLiked: boolean;
-    createdAt: Date;
-    updatedAt: Date;
+    createdAt: string;
+    updatedAt: string;
 };
 
 export enum Genre {

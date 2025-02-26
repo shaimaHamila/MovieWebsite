@@ -1,6 +1,6 @@
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { Movie } from "../../types/Movie";
-import { RootState } from "../../store/store";
+import { AppThunk, RootState } from "../../store/store";
 import { api } from "../../api/AxiosConfig";
 import { ApiResponse } from "../../types/ApiResponse";
 
@@ -9,6 +9,7 @@ interface MovieState {
   movies: Partial<Movie>[];
   page: number | undefined;
   pageSize: number | undefined;
+  totalPages: number;
   filter: any;
   totalCount: number | null | undefined;
   error?: string;
@@ -18,7 +19,8 @@ const initialState: MovieState = {
   status: "idle",
   movies: [],
   page: 1,
-  pageSize: 10,
+  pageSize: 8,
+  totalPages: 0,
   filter: {},
   totalCount: null,
   error: "",
@@ -32,6 +34,7 @@ export const fetchMovies = createAsyncThunk<ApiResponse<Partial<Movie>[]>, void>
         page: state.movie.page,
         pageSize: state.movie.pageSize,
         ...(state.movie.filter?.title && { title: state.movie.filter.title }),
+        ...(state.movie.filter?.genre && { genre: state.movie.filter.genre }),
       },
     });
     console.log(response.data);
@@ -78,7 +81,25 @@ export const deleteMovie = createAsyncThunk<any, number>("movie/delete", async (
 const movieSlice = createSlice({
   name: "movie",
   initialState,
-  reducers: {},
+  reducers: {
+    setPage(state, action: PayloadAction<number>) {
+      const totalPages = Math.ceil(state?.totalCount! / state?.pageSize!);
+      if (action.payload > totalPages || action.payload < 1) {
+        return;
+      }
+      state.page = action.payload;
+    },
+    setPageSize(state, action: PayloadAction<number>) {
+      state.pageSize = action.payload;
+      state.page = 1;
+    },
+    setGenreFilter(state, action: PayloadAction<string>) {
+      state.filter.genre = action.payload;
+    },
+    setTitleFilter(state, action: PayloadAction<string>) {
+      state.filter.title = action.payload;
+    },
+  },
   extraReducers: (builder) => {
     builder
       //fetch movies
@@ -90,6 +111,7 @@ const movieSlice = createSlice({
         state.movies = action?.payload?.data!;
         state.page = action?.payload?.meta?.currentPage;
         state.pageSize = action?.payload?.meta?.pageSize;
+        state.totalPages = action?.payload?.meta?.totalPages!;
         state.totalCount = action?.payload?.meta?.totalCount;
       })
       .addCase(fetchMovies.rejected, (state, action) => {
@@ -155,9 +177,40 @@ const movieSlice = createSlice({
   },
 });
 
+export const setPage =
+  (page: number): AppThunk =>
+  (dispatch, _getState) => {
+    dispatch(movieSlice.actions.setPage(page));
+    dispatch(fetchMovies());
+  };
+
+export const setLimit =
+  (pageSize: number): AppThunk =>
+  (dispatch, _getState) => {
+    dispatch(movieSlice.actions.setPageSize(pageSize));
+    dispatch(fetchMovies());
+  };
+export const setTitleFilter =
+  (filteredTitle: string): AppThunk =>
+  (dispatch, _getState) => {
+    dispatch(movieSlice.actions.setTitleFilter(filteredTitle));
+    dispatch(fetchMovies());
+  };
+export const setGenreFilter =
+  (filteredGenre: string): AppThunk =>
+  (dispatch, _getState) => {
+    dispatch(movieSlice.actions.setGenreFilter(filteredGenre));
+    dispatch(fetchMovies());
+  };
 export const selectMovies = (state: RootState) => state.movie.movies;
 
 export const selectStatus = (state: RootState) => state.movie.status;
+
+export const selectpage = (state: RootState) => state.movie.page;
+
+export const selectTotalCount = (state: RootState) => state.movie.totalCount;
+
+export const selectTotalPages = (state: RootState) => state.movie.totalPages;
 
 export const selectError = (state: RootState) => state.movie.error;
 

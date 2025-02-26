@@ -1,13 +1,19 @@
 import { MagnifyingGlassIcon } from "@heroicons/react/24/outline";
 import { Genre } from "../../../types/Movie";
+import { useState } from "react";
 
 interface MovieFilterProps {
-  selectedGenre: Genre | "";
-  setSelectedGenre: (genre: Genre | "") => void;
+  filterByGenre: (genre: Genre | "") => void;
   onSearch: (query: string) => void;
 }
 
-const MovieFilter: React.FC<MovieFilterProps> = ({ selectedGenre, setSelectedGenre, onSearch }) => {
+const MovieFilter: React.FC<MovieFilterProps> = ({ filterByGenre, onSearch }) => {
+  const [selectedGenre, setSelectedGenre] = useState<Genre | "">("");
+
+  const handelFilterByGenre = (genre: Genre | "") => {
+    setSelectedGenre(genre);
+    filterByGenre(genre);
+  };
   return (
     <div className='flex gap-4 mt-16'>
       {/* Search Input */}
@@ -38,7 +44,7 @@ const MovieFilter: React.FC<MovieFilterProps> = ({ selectedGenre, setSelectedGen
           id='genre-select'
           className='h-[46px] border text-sm rounded-lg block w-full p-2 dark:bg-neutral-700 dark:border-neutral-600 dark:placeholder-neutral-400 dark:text-white dark:focus:ring-red-500 dark:focus:border-red-500'
           value={selectedGenre}
-          onChange={(e) => setSelectedGenre(e.target.value as Genre | "")}
+          onChange={(e) => handelFilterByGenre(e.target.value as Genre | "")}
         >
           <option value=''>All</option>
           {Object.values(Genre).map((genre, key) => (

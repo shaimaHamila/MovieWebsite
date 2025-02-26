@@ -1,18 +1,20 @@
-const Footer = () => {
+import { Link } from "react-router-dom";
+
+const Footer: React.FC = () => {
   return (
-    <footer className='bg-[#131313] text-white p-6 mt-16'>
-      <div className='container mx-auto flex justify-between items-center'>
+    <footer className='bg-[#131313] text-white p-6 mt-28'>
+      <div className='container flex-wrap flex gap-6 justify-between items-center mx-auto max-w-7xl px-2 sm:px-6 lg:px-8 '>
         <div className='flex items-center'>
-          <img src='/public/png/logo.png' alt='Movie Logo' className='h-10' />
+          <img src='/png/logo.png' alt='Movie Logo' className='h-10' />
         </div>
 
-        <div className='flex gap-6'>
-          <a href='/' className='hover:underline hover:text-red-500'>
+        <div className='flex gap-6 mb-4 sm:mb-0'>
+          <Link to='/' className='hover:underline hover:text-red-500'>
             Home
-          </a>
-          <a href='/favorites' className='hover:underline hover:text-red-500'>
+          </Link>
+          <Link to='/favorites' className='hover:underline hover:text-red-500'>
             Favorites Movies
-          </a>
+          </Link>
         </div>
 
         <div className='text-sm'>

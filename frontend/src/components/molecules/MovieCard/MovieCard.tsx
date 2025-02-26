@@ -1,6 +1,7 @@
 import React from "react";
 import { HeartIcon, ArrowRightCircleIcon, ClockIcon, CalendarDaysIcon, StarIcon } from "@heroicons/react/24/solid";
 import { Movie } from "../../../types/Movie";
+import FormatDate from "../../../helpers/FormatDate";
 
 interface MovieCardProps {
   movie: Partial<Movie>;
@@ -60,7 +61,7 @@ const MovieCard: React.FC<MovieCardProps> = ({ movie, onLike, onSeeDetails }) =>
             </span>
             <span className='flex items-center gap-1 text-sm font-medium text-gray-300'>
               <CalendarDaysIcon className='h-4 w-4' />
-              {movie.releaseDate?.toLocaleDateString()}
+              {FormatDate(movie.releaseDate)}
             </span>
             <span className='flex items-center gap-1 text-sm font-medium text-gray-300'>
               <StarIcon className='h-4 w-4 text-yellow-500' />
