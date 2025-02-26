@@ -93,12 +93,12 @@ const MovieSlider: React.FC = () => {
                 </button>
                 <button
                   className={
-                    "px-4 py-2 bg-white bg-opacity-10 border border-red-600 text-white rounded-md hover:bg-red-600  hover:bg-opacity-30 transition flex items-center gap-2 mr-4"
+                    "px-4 py-2 bg-white bg-opacity-10 border border-white text-white rounded-md hover:bg-red-600  hover:bg-opacity-30 transition flex items-center gap-2 mr-4"
                   }
                   onClick={() => setIsLiked(!isLiked)}
                 >
                   {isLiked ? " Favorit" : "Add to Favorites"}
-                  <HeartIcon className={`${isLiked ? "h-6 w-6 text-red-600" : "h-6 w-6 text-white"}`} />
+                  <HeartIcon className={`${isLiked ? "h-6 w-6 text-red-600 border-red-600" : "h-6 w-6 text-white"}`} />
                 </button>
               </div>
             </div>

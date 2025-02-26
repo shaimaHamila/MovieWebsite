@@ -11,7 +11,7 @@ interface MovieCardProps {
 const MovieCard: React.FC<MovieCardProps> = ({ movie, onLike, onSeeDetails }) => {
   return (
     <div
-      className='h-[30rem] max-w-[270px] bg-[#131313] text-white rounded-sm overflow-hidden shadow-lg p-4 relative'
+      className='h-[30rem] max-w-[350px] w-full bg-[#131313] text-white rounded-sm overflow-hidden shadow-lg p-4 relative'
       style={{
         backgroundImage: `url(${movie.coverUrl})`,
         backgroundSize: "cover",
@@ -29,9 +29,9 @@ const MovieCard: React.FC<MovieCardProps> = ({ movie, onLike, onSeeDetails }) =>
       {/* Movie Card Content - Positioned at the bottom */}
       <div className='absolute bottom-0 left-0 right-0 p-4 z-10'>
         {/* Buttons */}
-        <div className='flex  gap-3 justify-between mt-4'>
+        <div className='flex flex-wrap gap-3 justify-between mt-4 max-w-[250px]'>
           <button
-            className='flex items-center gap-2 bg-red-600 text-white px-3 py-1.5 text-sm rounded-lg hover:bg-red-500 transition'
+            className='min-w-[110px] flex items-center gap-2 bg-red-600 text-white px-3 py-1.5 text-sm rounded-lg hover:bg-red-500 transition'
             onClick={onSeeDetails}
           >
             <ArrowRightCircleIcon className='h-4 w-4' />
@@ -39,12 +39,12 @@ const MovieCard: React.FC<MovieCardProps> = ({ movie, onLike, onSeeDetails }) =>
           </button>
 
           <button
-            className={`flex items-center gap-2 px-3 py-1.5 text-sm border-2 rounded-lg transition text-white ${
+            className={`min-w-[110px] flex items-center gap-2 px-3 py-1.5 text-sm border-2 rounded-lg transition text-white ${
               movie.isLiked ? "border-red-600" : "border-white"
             }`}
             onClick={onLike}
           >
-            <HeartIcon className={`${movie.isLiked ? "h-6 w-6 text-red-600" : "h-6 w-6 text-white"}`} />
+            <HeartIcon className={`${movie.isLiked ? "h-4 w-4 text-red-600" : "h-4 w-4 text-white"} `} />
             {movie.isLiked ? "Favorit" : "Add Fav"}
           </button>
         </div>
@@ -67,7 +67,7 @@ const MovieCard: React.FC<MovieCardProps> = ({ movie, onLike, onSeeDetails }) =>
               {movie.rating !== null ? movie.rating : "N/A"}
             </span>
           </h3>
-          <p className='text-sm text-gray-400 mt-2 line-clamp-3'>{movie.description}</p>
+          <p className='text-sm text-gray-400 mt-2 line-clamp-2'>{movie.description}</p>
         </div>
       </div>
     </div>

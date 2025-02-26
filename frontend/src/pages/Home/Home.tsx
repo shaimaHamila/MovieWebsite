@@ -2,7 +2,8 @@ import { useState } from "react";
 import MovieCard from "../../components/molecules/MovieCard/MovieCard";
 import MovieSlider from "../../components/molecules/MovieSlider/MovieSlider";
 import { Genre } from "../../types/Movie";
-
+import "./Home.css";
+import MovieFilter from "../../components/molecules/MovieFilter/MovieFilter";
 const movieData = [
   {
     title: "Black Widow",
@@ -41,12 +42,19 @@ const movieData = [
     rating: 8.3,
     isLike: false,
   },
-  // Add more movies as needed
+  {
+    title: "Spider-Man: No Way Home",
+    duration: 50,
+    description: "Peter Parker faces the consequences of revealing his identity to the world.",
+    coverUrl: "./public/png/movie3.png",
+    releaseDate: new Date("2021-12-17"),
+    rating: 8.3,
+    isLike: false,
+  },
 ];
 
 const Home: React.FC = () => {
   const [isLiked, setIsLiked] = useState<boolean>(false);
-  const [searchQuery, setSearchQuery] = useState<string>("");
   const [selectedGenre, setSelectedGenre] = useState<Genre | "">("");
 
   const handleLike = () => {
@@ -61,38 +69,24 @@ const Home: React.FC = () => {
   return (
     <div>
       <MovieSlider />
-      <div className='container'>
-        {/* Search and Select */}
-        {/* Search and Genre Select */}
-        <div className='flex gap-4'>
-          {/* Search input */}
-          <input
-            type='text'
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            placeholder='Search By title'
-            className='p-2 border border-gray-300 rounded'
-          />
-
-          {/* Genre select */}
-          <select
-            value={selectedGenre}
-            onChange={(e) => setSelectedGenre(e.target.value as Genre | "")}
-            className='p-2 border border-gray-300 rounded bg-white text-black cursor-pointer focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all duration-200 ease-in-out'
-          >
-            <option value=''>All</option>
-            {Object.values(Genre).map((genre) => (
-              <option key={genre} value={genre} className='cursor-pointer'>
-                {genre}
-              </option>
-            ))}
-          </select>
+      <div className='container mx-auto max-w-7xl px-2 sm:px-6 lg:px-8 mt-16'>
+        <div className=' text-4xl font-bold uppercase'>
+          <p className='text-white text-4xl'>Find Movies </p>
+          <span className='text-6xl bg-gradient-to-r from-blue-600 via-purple-600 to-red-600 bg-clip-text text-transparent'>
+            TV Shows And More
+          </span>
         </div>
 
+        <MovieFilter
+          selectedGenre={selectedGenre}
+          setSelectedGenre={setSelectedGenre}
+          onSearch={(query) => console.log("Search Query:", query)}
+        />
+
         {/* Display filtered movies */}
-        <div className='mt-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4'>
-          {movieData.map((movie) => (
-            <MovieCard key={movie.title} movie={movie} onLike={handleLike} onSeeDetails={handleSeeDetails} />
+        <div className='mt-10 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 justify-items-center'>
+          {movieData.map((movie, key) => (
+            <MovieCard key={key} movie={movie} onLike={handleLike} onSeeDetails={handleSeeDetails} />
           ))}
         </div>
       </div>
