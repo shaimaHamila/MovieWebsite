@@ -5,8 +5,8 @@ import FormatDate from "../../../helpers/FormatDate";
 
 interface MovieCardProps {
   movie: Partial<Movie>;
-  onLike: () => void;
-  onSeeDetails: () => void;
+  onLike: (movie: Partial<Movie>) => void;
+  onSeeDetails: (movie: Partial<Movie>) => void;
 }
 
 const MovieCard: React.FC<MovieCardProps> = ({ movie, onLike, onSeeDetails }) => {
@@ -33,7 +33,7 @@ const MovieCard: React.FC<MovieCardProps> = ({ movie, onLike, onSeeDetails }) =>
         <div className='flex flex-wrap gap-3 justify-between mt-4 max-w-[250px]'>
           <button
             className='min-w-[110px] flex items-center gap-2 bg-red-600 text-white px-3 py-1.5 text-sm rounded-lg hover:bg-red-500 transition'
-            onClick={onSeeDetails}
+            onClick={() => onSeeDetails(movie)}
           >
             <ArrowRightCircleIcon className='h-4 w-4' />
             See details
@@ -43,7 +43,7 @@ const MovieCard: React.FC<MovieCardProps> = ({ movie, onLike, onSeeDetails }) =>
             className={`min-w-[110px] flex items-center gap-2 px-3 py-1.5 text-sm border-2 rounded-lg transition text-white ${
               movie.isLiked ? "border-red-600" : "border-white"
             }`}
-            onClick={onLike}
+            onClick={() => onLike(movie)}
           >
             <HeartIcon className={`${movie.isLiked ? "h-4 w-4 text-red-600" : "h-4 w-4 text-white"} `} />
             {movie.isLiked ? "Favorit" : "Add Fav"}

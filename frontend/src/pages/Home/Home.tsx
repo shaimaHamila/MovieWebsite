@@ -1,12 +1,13 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import MovieCard from "../../components/molecules/MovieCard/MovieCard";
 import MovieSlider from "../../components/molecules/MovieSlider/MovieSlider";
-import { Genre } from "../../types/Movie";
-import "./Home.css";
+import { Genre, Movie } from "../../types/Movie";
 import MovieFilter from "../../components/molecules/MovieFilter/MovieFilter";
 import { useSelector } from "react-redux";
 import {
+  fetchFirstFiveMovies,
   fetchMovies,
+  selectFirstFiveMovies,
   selectMovies,
   selectpage,
   selectTotalCount,
@@ -14,40 +15,41 @@ import {
   setGenreFilter,
   setPage,
   setTitleFilter,
+  updateMovie,
 } from "../../features/movie/movieSlice";
 import { store } from "../../store/store";
 import Pagination from "../../components/molecules/Pagination/Pagination";
 
 const Home: React.FC = () => {
   const movies = useSelector(selectMovies);
+  const firstFiveMovies = useSelector(selectFirstFiveMovies);
   const totalMovies = useSelector(selectTotalCount);
   const totalPages = useSelector(selectTotalPages);
   const currentPage = useSelector(selectpage);
 
-  const [isLiked, setIsLiked] = useState<boolean>(false);
   const filterByGenre = (selectedGenre: Genre | "") => {
-    console.log(selectedGenre);
     store.dispatch(setGenreFilter(selectedGenre));
   };
   const handelSearch = (title: string) => {
     store.dispatch(setTitleFilter(title));
   };
-  const handleLike = () => {
-    setIsLiked(!isLiked);
+  const handleLike = (movie: Partial<Movie>) => {
+    store.dispatch(updateMovie({ id: movie?.id, isLiked: !movie?.isLiked }));
   };
 
-  const handleSeeDetails = () => {
+  const handleSeeDetails = (movie: Partial<Movie>) => {
     // Implement the functionality for "See details"
-    console.log("See details clicked");
+    console.log("See details clicked", movie);
   };
 
   useEffect(() => {
     store.dispatch(fetchMovies());
+    store.dispatch(fetchFirstFiveMovies());
   }, []);
 
   return (
     <div>
-      <MovieSlider movies={movies.slice(0, 5)} />
+      <MovieSlider movies={firstFiveMovies} />
       <div className='container mx-auto max-w-7xl px-2 sm:px-6 lg:px-8 mt-16'>
         <div className=' text-4xl font-bold uppercase'>
           <p className='text-white text-4xl'>Find Movies </p>

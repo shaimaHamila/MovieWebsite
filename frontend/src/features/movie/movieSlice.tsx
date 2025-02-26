@@ -7,6 +7,8 @@ import { ApiResponse } from "../../types/ApiResponse";
 interface MovieState {
   status: "idle" | "loading" | "failed";
   movies: Partial<Movie>[];
+  firstFiveMovies: Partial<Movie>[];
+  favoriteMovies: Partial<Movie>[];
   page: number | undefined;
   pageSize: number | undefined;
   totalPages: number;
@@ -18,6 +20,8 @@ interface MovieState {
 const initialState: MovieState = {
   status: "idle",
   movies: [],
+  favoriteMovies: [],
+  firstFiveMovies: [],
   page: 1,
   pageSize: 8,
   totalPages: 0,
@@ -37,21 +41,50 @@ export const fetchMovies = createAsyncThunk<ApiResponse<Partial<Movie>[]>, void>
         ...(state.movie.filter?.genre && { genre: state.movie.filter.genre }),
       },
     });
-    console.log(response.data);
     return response.data;
   } catch (error) {
     //add an alert
     throw error;
   }
 });
+export const fetchFirstFiveMovies = createAsyncThunk<ApiResponse<Partial<Movie>[]>, void>(
+  "movie/fetch/fiveMovies",
+  async () => {
+    try {
+      const response = await api.get<ApiResponse<Partial<Movie>[]>>("/movie", {
+        params: {
+          page: 1,
+          pageSize: 5,
+        },
+      });
+      return response.data;
+    } catch (error) {
+      //add an alert
+      throw error;
+    }
+  },
+);
 
-export const updateMovie = createAsyncThunk<Partial<Movie>, Partial<Movie>>("movie/update", async (movieToUpdate) => {
+export const fetchFavoriteMovies = createAsyncThunk<ApiResponse<Partial<Movie>[]>, void>(
+  "movie/fetch/favorites",
+  async () => {
+    try {
+      const response = await api.get<ApiResponse<Partial<Movie>[]>>("/movie/favorites");
+      return response.data;
+    } catch (error) {
+      throw error;
+    }
+  },
+);
+
+export const updateMovie = createAsyncThunk<any, Partial<Movie>>("movie/update", async (movieToUpdate) => {
+  const { id, ...movieToUpdateWithoutId } = movieToUpdate;
   try {
-    const response = await api.put<Partial<Movie>>("/movie/update", movieToUpdate, {
-      params: { id: movieToUpdate.id },
+    const response = await api.put<any>("/movie/update", movieToUpdateWithoutId, {
+      params: { id },
     });
-    console.log(response.data);
-    return response.data;
+    console.log("updatee", response.data.data);
+    return response?.data?.data;
   } catch (error) {
     throw error;
   }
@@ -62,7 +95,6 @@ export const getMovieById = createAsyncThunk<Partial<Movie>, number>("movie/getM
     const response = await api.get("/movie/update", {
       params: { id },
     });
-    console.log(response.data);
     return response.data;
   } catch (error) {
     throw error;
@@ -118,6 +150,23 @@ const movieSlice = createSlice({
         state.status = "failed";
         state.error = action.error.message ?? "Something went wrong";
       })
+      //fetch first five movies
+      .addCase(fetchFirstFiveMovies.fulfilled, (state, action) => {
+        state.status = "idle";
+        state.firstFiveMovies = action?.payload?.data!;
+      })
+      //fetch favorite movies
+      .addCase(fetchFavoriteMovies.pending, (state) => {
+        state.status = "loading";
+      })
+      .addCase(fetchFavoriteMovies.fulfilled, (state, action) => {
+        state.status = "idle";
+        state.favoriteMovies = action?.payload?.data!;
+      })
+      .addCase(fetchFavoriteMovies.rejected, (state, action) => {
+        state.status = "failed";
+        state.error = action.error.message ?? "Something went wrong";
+      })
 
       // Update Movie
       .addCase(updateMovie.pending, (state) => {
@@ -126,7 +175,7 @@ const movieSlice = createSlice({
       .addCase(updateMovie.fulfilled, (state, action) => {
         state.status = "idle";
 
-        const index = state?.movies?.findIndex((movie) => movie?.id === action.payload.id);
+        const index = state?.movies?.findIndex((movie) => movie?.id === action.payload?.id);
         if (index !== -1) {
           // check if the order is different from the one in the list
           if (JSON.stringify(state?.movies[index]) !== JSON.stringify(action.payload)) {
@@ -202,7 +251,12 @@ export const setGenreFilter =
     dispatch(movieSlice.actions.setGenreFilter(filteredGenre));
     dispatch(fetchMovies());
   };
+
 export const selectMovies = (state: RootState) => state.movie.movies;
+
+export const selectFavoriteMovies = (state: RootState) => state.movie.favoriteMovies;
+
+export const selectFirstFiveMovies = (state: RootState) => state.movie.firstFiveMovies;
 
 export const selectStatus = (state: RootState) => state.movie.status;
 
