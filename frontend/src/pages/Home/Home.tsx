@@ -57,15 +57,15 @@ const Home: React.FC = () => {
         </div>
 
         <MovieFilter filterByGenre={filterByGenre} onSearch={(title) => handelSearch(title)} />
-
+        <h4 className='mt-10 text-lg '>Total Movies: {totalMovies}</h4>
         {/* Display filtered movies */}
-        <div className='mt-10 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 justify-items-center'>
+        <div className='mt-5 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 justify-items-center'>
           {movies.map((movie, key) => (
             <MovieCard key={key} movie={movie} onLike={handleLike} onSeeDetails={handleSeeDetails} />
           ))}
         </div>
         {/* Pagination Component */}
-        <div className='mt-8 flex justify-center'>
+        <div className='mt-8 flex justify-end'>
           <Pagination
             currentPage={currentPage || 1}
             totalPages={totalPages || 0}
