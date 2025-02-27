@@ -81,6 +81,40 @@ export const getAllMovies = async (req: Request, res: Response) => {
         );
     }
 }
+//Get favorite movies with pagination and filter
+export const getFavoriteMovies = async (_req: Request, res: Response) => {
+
+    try {
+
+
+        const movies = await prisma.movie.findMany({
+            where: { isLiked: true },
+            orderBy: {
+                createdAt: "desc"
+            },
+        })
+
+        //Get total count of movies
+        const totalCount = await prisma.movie.count({
+            where: { isLiked: true },
+
+        });
+        const responsePayload = {
+            data: movies,
+            meta:
+            {
+                totalCount,
+            },
+        };
+        return CustomResponse.FetchPagedSucess(res, responsePayload);
+    }
+    catch (error) {
+        return CustomResponse.InternalServerError(
+            res,
+            "An error occurred while fetching Favorite the movies"
+        );
+    }
+}
 
 // Get movie by id
 export const getMovieById = async (req: Request, res: Response) => {

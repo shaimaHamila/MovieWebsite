@@ -1,0 +1,24 @@
+.movie-slide {
+  background-size: cover;
+  background-position: center;
+}
+
+.movie-slide0 {
+  background-image: url("/png/movie1.png") !important;
+}
+
+.movie-slide1 {
+  background-image: url("/png/movie2.png") !important;
+}
+
+.movie-slide2 {
+  background-image: url("./png/movie3.png") !important;
+}
+
+.movie-slide3 {
+  background-image: url("./png/movie4.png") !important;
+}
+
+.movie-slide4 {
+  background-image: url("/png/movie5.png") !important;
+}
