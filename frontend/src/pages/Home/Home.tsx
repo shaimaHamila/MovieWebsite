@@ -19,6 +19,8 @@ import {
 } from "../../features/movie/movieSlice";
 import { store } from "../../store/store";
 import Pagination from "../../components/molecules/Pagination/Pagination";
+import EmptyProductList from "../../components/molecules/EmptyProductList/EmptyProductList";
+import { useNavigate } from "react-router-dom";
 
 const Home: React.FC = () => {
   const movies = useSelector(selectMovies);
@@ -26,6 +28,8 @@ const Home: React.FC = () => {
   const totalMovies = useSelector(selectTotalCount);
   const totalPages = useSelector(selectTotalPages);
   const currentPage = useSelector(selectpage);
+
+  const navigate = useNavigate();
 
   const filterByGenre = (selectedGenre: Genre | "") => {
     store.dispatch(setGenreFilter(selectedGenre));
@@ -38,8 +42,7 @@ const Home: React.FC = () => {
   };
 
   const handleSeeDetails = (movie: Partial<Movie>) => {
-    // Implement the functionality for "See details"
-    console.log("See details clicked", movie);
+    navigate(`/movie-details/${movie.id}`);
   };
 
   useEffect(() => {
@@ -49,7 +52,7 @@ const Home: React.FC = () => {
 
   return (
     <div>
-      <MovieSlider movies={firstFiveMovies} />
+      <MovieSlider movies={firstFiveMovies} onLike={handleLike} onSeeDetails={handleSeeDetails} />
       <div className='container mx-auto max-w-7xl px-2 sm:px-6 lg:px-8 mt-16'>
         <div className=' text-4xl font-bold uppercase'>
           <p className='text-white text-4xl'>Find Movies </p>
@@ -61,10 +64,18 @@ const Home: React.FC = () => {
         <MovieFilter filterByGenre={filterByGenre} onSearch={(title) => handelSearch(title)} />
         <h4 className='mt-10 text-lg '>Total Movies: {totalMovies}</h4>
         {/* Display filtered movies */}
-        <div className='mt-5 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 justify-items-center'>
-          {movies.map((movie, key) => (
-            <MovieCard key={key} movie={movie} onLike={handleLike} onSeeDetails={handleSeeDetails} />
-          ))}
+        <div>
+          {movies.length == 0 ? (
+            <div className='flex justify-center'>
+              <EmptyProductList />
+            </div>
+          ) : (
+            <div className='mt-5 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 justify-items-center'>
+              {movies.map((movie, key) => (
+                <MovieCard key={key} movie={movie} onLike={handleLike} onSeeDetails={handleSeeDetails} />
+              ))}
+            </div>
+          )}
         </div>
         {/* Pagination Component */}
         <div className='mt-8 flex justify-end'>

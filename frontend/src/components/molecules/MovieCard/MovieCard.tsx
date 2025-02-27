@@ -30,7 +30,7 @@ const MovieCard: React.FC<MovieCardProps> = ({ movie, onLike, onSeeDetails }) =>
       {/* Movie Card Content - Positioned at the bottom */}
       <div className='absolute bottom-0 left-0 right-0 p-4 z-10'>
         {/* Buttons */}
-        <div className='flex flex-wrap gap-3 justify-between mt-4 max-w-[250px]'>
+        <div className='flex flex-wrap gap-1 justify-between mt-4 max-w-[250px]'>
           <button
             className='min-w-[110px] flex items-center gap-2 bg-red-600 text-white px-3 py-1.5 text-sm rounded-lg hover:bg-red-500 transition'
             onClick={() => onSeeDetails(movie)}
@@ -40,19 +40,19 @@ const MovieCard: React.FC<MovieCardProps> = ({ movie, onLike, onSeeDetails }) =>
           </button>
 
           <button
-            className={`min-w-[110px] flex items-center gap-2 px-3 py-1.5 text-sm border-2 rounded-lg transition text-white ${
+            className={`min-w-[110px] hover:bg-red-300 hover:bg-opacity-20 flex items-center gap-2 px-3 py-1.5 text-sm border-2 rounded-lg transition text-white ${
               movie.isLiked ? "border-red-600" : "border-white"
             }`}
             onClick={() => onLike(movie)}
           >
             <HeartIcon className={`${movie.isLiked ? "h-4 w-4 text-red-600" : "h-4 w-4 text-white"} `} />
-            {movie.isLiked ? "Favorit" : "Add Fav"}
+            {movie.isLiked ? "Unfavorite it" : "Add Fav"}
           </button>
         </div>
 
         {/* Movie Details */}
         <div className='mt-4'>
-          <h3 className='flex items-center gap-2 text-lg font-bold flex-wrap'>
+          <div className='flex items-center gap-2 text-lg font-bold flex-wrap'>
             <p className='line-clamp-1'>🎬 {movie.title}</p>
 
             <span className='flex items-center gap-1 text-sm font-medium text-gray-300'>
@@ -67,7 +67,7 @@ const MovieCard: React.FC<MovieCardProps> = ({ movie, onLike, onSeeDetails }) =>
               <StarIcon className='h-4 w-4 text-yellow-500' />
               {movie.rating !== null ? movie.rating : "N/A"}
             </span>
-          </h3>
+          </div>
           <p className='text-sm text-gray-400 mt-2 line-clamp-2'>{movie.description}</p>
         </div>
       </div>

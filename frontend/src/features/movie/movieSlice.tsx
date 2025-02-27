@@ -175,12 +175,27 @@ const movieSlice = createSlice({
       .addCase(updateMovie.fulfilled, (state, action) => {
         state.status = "idle";
 
+        //Update movies list
         const index = state?.movies?.findIndex((movie) => movie?.id === action.payload?.id);
         if (index !== -1) {
-          // check if the order is different from the one in the list
+          // check if the movie is different from the one in the list
           if (JSON.stringify(state?.movies[index]) !== JSON.stringify(action.payload)) {
             state.movies[index] = action.payload;
             //TODO add alert
+          }
+        }
+
+        //Update favorites movies list
+        if (state.favoriteMovies) {
+          state.favoriteMovies = state.favoriteMovies.filter((movie) => movie?.id !== action.payload?.id);
+        }
+
+        //Update First 5 movies list
+        const index2 = state?.firstFiveMovies?.findIndex((movie) => movie?.id === action.payload?.id);
+        if (index2 !== -1) {
+          // check if the movie is different from the one in the list
+          if (JSON.stringify(state?.firstFiveMovies[index2]) !== JSON.stringify(action.payload)) {
+            state.firstFiveMovies[index2] = action.payload;
           }
         }
       })

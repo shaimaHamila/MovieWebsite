@@ -39,7 +39,7 @@ const Header: React.FC = () => {
           </div>
           <div className='flex flex-1 items-center sm:items-stretch'>
             <div className='flex shrink-0 items-center'>
-              <img alt='Movie Logo' src='/png/logo.png' className='h-8 w-auto' />
+              <img alt='Movie Logo' src='./png/logo.png' className='h-8 w-auto' />
             </div>
             <div className='flex-1 flex justify-center'>
               <div className='hidden sm:flex space-x-4'>
@@ -108,7 +108,7 @@ const Header: React.FC = () => {
               aria-current={item.current ? "page" : undefined}
               onClick={() => setActiveNav(item.name)}
               className={`block rounded-md px-3 py-2 text-base font-medium transition 
-                ${activeNav === item.name ? "  text-red-500" : "text-gray-300 hover:text-red-400"}`}
+                ${activeNav === item.name ? "text-red-500" : "text-gray-300 hover:text-red-400"}`}
             >
               {item.name}
             </DisclosureButton>
