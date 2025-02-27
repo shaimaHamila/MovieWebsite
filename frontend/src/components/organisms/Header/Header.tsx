@@ -63,32 +63,6 @@ const Header: React.FC = () => {
             </div>
           </div>
           <div className='absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0'>
-            <div className='flex items-center space-x-2'>
-              <button
-                type='button'
-                onClick={() => {
-                  setIsExpanded(true);
-                  setTimeout(() => inputRef.current?.focus(), 100); // Auto-focus after opening
-                }}
-                className='rounded-full bg-neutral-700 p-2 text-gray-400 hover:text-white transition'
-              >
-                <MagnifyingGlassIcon className='size-6' />
-              </button>
-
-              <div
-                className={`overflow-hidden transition-all duration-300 ${
-                  isExpanded ? "w-40 opacity-100" : "w-0 opacity-0"
-                }`}
-              >
-                <input
-                  ref={inputRef}
-                  type='text'
-                  placeholder='Search...'
-                  className='px-3 py-1.5 w-full bg-neutral-800 text-white rounded-md outline-none'
-                />
-              </div>
-            </div>
-
             {/* Profile */}
             <div className='flex items-center space-x-3 ml-3'>
               <img alt='Profile' src='./public/png/profileImg.png' className='size-8 rounded-full' />

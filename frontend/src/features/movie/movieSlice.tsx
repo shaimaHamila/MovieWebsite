@@ -30,25 +30,28 @@ const initialState: MovieState = {
   error: "",
 };
 
-export const fetchMovies = createAsyncThunk<ApiResponse<Partial<Movie>[]>, void>("movie/fetch", async (_, thunkAPI) => {
-  const state = thunkAPI.getState() as RootState;
-  try {
-    const response = await api.get<ApiResponse<Partial<Movie>[]>>("/movie", {
-      params: {
-        page: state.movie.page,
-        pageSize: state.movie.pageSize,
-        ...(state.movie.filter?.title && { title: state.movie.filter.title }),
-        ...(state.movie.filter?.genre && { genre: state.movie.filter.genre }),
-      },
-    });
-    return response.data;
-  } catch (error) {
-    //add an alert
-    throw error;
-  }
-});
+export const fetchMovies = createAsyncThunk<ApiResponse<Partial<Movie>[]>, void>(
+  "movie/fetchMovies",
+  async (_, thunkAPI) => {
+    const state = thunkAPI.getState() as RootState;
+    try {
+      const response = await api.get<ApiResponse<Partial<Movie>[]>>("/movie", {
+        params: {
+          page: state.movie.page,
+          pageSize: state.movie.pageSize,
+          ...(state.movie.filter?.title && { title: state.movie.filter.title }),
+          ...(state.movie.filter?.genre && { genre: state.movie.filter.genre }),
+        },
+      });
+      return response.data;
+    } catch (error) {
+      //add an alert
+      throw error;
+    }
+  },
+);
 export const fetchFirstFiveMovies = createAsyncThunk<ApiResponse<Partial<Movie>[]>, void>(
-  "movie/fetch/fiveMovies",
+  "movie/fetch/fetchFirstFiveMovies",
   async () => {
     try {
       const response = await api.get<ApiResponse<Partial<Movie>[]>>("/movie", {
@@ -66,7 +69,7 @@ export const fetchFirstFiveMovies = createAsyncThunk<ApiResponse<Partial<Movie>[
 );
 
 export const fetchFavoriteMovies = createAsyncThunk<ApiResponse<Partial<Movie>[]>, void>(
-  "movie/fetch/favorites",
+  "movie/fetch/fetchFavoriteMovies",
   async () => {
     try {
       const response = await api.get<ApiResponse<Partial<Movie>[]>>("/movie/favorites");
@@ -77,13 +80,12 @@ export const fetchFavoriteMovies = createAsyncThunk<ApiResponse<Partial<Movie>[]
   },
 );
 
-export const updateMovie = createAsyncThunk<any, Partial<Movie>>("movie/update", async (movieToUpdate) => {
+export const updateMovie = createAsyncThunk<any, Partial<Movie>>("movie/updateMovie", async (movieToUpdate) => {
   const { id, ...movieToUpdateWithoutId } = movieToUpdate;
   try {
     const response = await api.put<any>("/movie/update", movieToUpdateWithoutId, {
       params: { id },
     });
-    console.log("updatee", response.data.data);
     return response?.data?.data;
   } catch (error) {
     throw error;
@@ -92,16 +94,16 @@ export const updateMovie = createAsyncThunk<any, Partial<Movie>>("movie/update",
 
 export const getMovieById = createAsyncThunk<Partial<Movie>, number>("movie/getMovieById", async (id) => {
   try {
-    const response = await api.get("/movie/update", {
+    const response = await api.get("/movie/getMovieById", {
       params: { id },
     });
-    return response.data;
+    return response.data.data;
   } catch (error) {
     throw error;
   }
 });
 
-export const deleteMovie = createAsyncThunk<any, number>("movie/delete", async (id) => {
+export const deleteMovie = createAsyncThunk<any, number>("movie/deleteMovie", async (id) => {
   try {
     const response = await api.delete(`/movie/${id}`);
     return response.data;

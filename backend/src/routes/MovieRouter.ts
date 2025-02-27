@@ -6,7 +6,7 @@ const movieRouter = express.Router();
 movieRouter.post("/", createMovie)
 movieRouter.get("/", getAllMovies);
 movieRouter.get("/favorites", getFavoriteMovies);
-movieRouter.get("/", getMovieById);
+movieRouter.get("/getMovieById", getMovieById);
 movieRouter.put("/update", updateMovie);
 movieRouter.delete("/:id", deleteMovie);
 
