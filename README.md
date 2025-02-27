@@ -65,5 +65,8 @@ The responsive website.
    ```
 3. Start the development server:
    ```sh
-   docker-compose up
+   cd frontend
+   npm start
+   cd backend
+   npm start
    ```
